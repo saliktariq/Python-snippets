@@ -101,3 +101,81 @@ def parse_command(line):
         make_file(name, current_dir)
     else:
         print(f"Invalid command {command}")
+        
+
+# Define the file system tree
+root = Folder("root")
+current_dir = root
+
+# Add top-level folders
+programming_folder = Folder("Programming")
+root.add_child(programming_folder)
+music_folder = Folder("Music")
+root.add_child(music_folder)
+
+# Add subfolders and files within the "Programming" folder
+python_folder = Folder("Python")
+programming_folder.add_child(python_folder)
+make_file("script.py", python_folder)
+make_file("README.md", python_folder)
+
+java_folder = Folder("Java")
+programming_folder.add_child(java_folder)
+make_file("Main.java", java_folder)
+make_file("README.md", java_folder)
+
+# Add subfolders and files within the "Music" folder
+rock_folder = Folder("Rock")
+music_folder.add_child(rock_folder)
+make_file("Stairway to Heaven.mp3", rock_folder)
+make_file("Hotel California.mp3", rock_folder)
+
+jazz_folder = Folder("Jazz")
+music_folder.add_child(jazz_folder)
+make_file("Take Five.mp3", jazz_folder)
+make_file("My Favorite Things.mp3", jazz_folder)
+
+# Display the file system structure
+print_path(root)
+print()
+parse_command("ls")
+
+# Query the file system
+parse_command("cd Music")
+print_path(current_dir)
+print()
+parse_command("ls")
+
+parse_command("cd Jazz")
+print_path(current_dir)
+print()
+parse_command("ls")
+
+parse_command("jump Programming")
+print_path(current_dir)
+print()
+parse_command("ls")
+
+parse_command("mkfile script.py")
+parse_command("mkfile README.md")
+
+parse_command("cd Python")
+print_path(current_dir)
+print()
+parse_command("ls")
+
+parse_command("cd ..")
+print_path(current_dir)
+print()
+parse_command("ls")
+
+parse_command("cd ..")
+print_path(current_dir)
+print()
+parse_command("ls")
+
+parse_command("cdr")
+print_path(current_dir)
+print()
+parse_command("ls")
+
