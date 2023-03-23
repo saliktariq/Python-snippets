@@ -1,88 +1,103 @@
-import os
+class Node:
+    def __init__(self, name, parent=None):
+        self.name = name
+        self.parent = parent
+        self.children = []
 
-class FileSystem:
-    def __init__(self):
-        self.current_directory = "/"
-        self.root = {}
+    def add_child(self, child):
+        child.parent = self
+        self.children.append(child)
 
-    def mkdir(self, path):
-        directories = path.split("/")
-        current = self.root
-        for directory in directories:
-            if directory not in current:
-                current[directory] = {}
-            current = current[directory]
+    def path(self):
+        if self.parent:
+            return self.parent.path() + '/' + self.name
+        return self.name
 
-    def cd(self, path):
-        if path == "/":
-            self.current_directory = path
+class File(Node):
+    def __init__(self, name):
+        super().__init__(name)
+
+    def __str__(self):
+        return self.name
+
+class Folder(Node):
+    def __init__(self, name):
+        super().__init__(name)
+
+    def __str__(self):
+        return self.name
+
+def find_child(name, parent):
+    for child in parent.children:
+        if child.name == name:
+            return child
+    return None
+
+def make_dir(name, parent):
+    if find_child(name, parent) is not None:
+        print(f"Directory {name} already exists in the current directory")
+        return
+    folder = Folder(name)
+    parent.add_child(folder)
+    print(f"New directory {name} created")
+
+def make_file(name, parent):
+    if find_child(name, parent) is not None:
+        print(f"File {name} already exists in the current directory")
+        return
+    file = File(name)
+    parent.add_child(file)
+    print(f"New file {name} created")
+
+root = Folder("root")
+current_dir = root
+
+def print_path(node):
+    print(node.path(), end='')
+
+def parse_command(line):
+    global current_dir
+    parts = line.split()
+    if not parts:
+        return
+    command, *args = parts
+
+    if command == 'cd':
+        if not args:
             return
-        directories = path.split("/")
-        current = self.root
-        for directory in directories:
-            if directory not in current:
-                print("Directory not found")
-                return
-            current = current[directory]
-        self.current_directory = path
-
-    def ls(self):
-        current = self.root
-        if self.current_directory != "/":
-            directories = self.current_directory.split("/")
-            for directory in directories:
-                if directory not in current:
-                    return
-                current = current[directory]
-        for name, value in current.items():
-            if isinstance(value, dict):
-                print(f"{name}/")
-            else:
-                print(name)
-
-    def touch(self, path):
-        directories = path.split("/")
-        current = self.root
-        for directory in directories[:-1]:
-            if directory not in current:
-                print("Directory not found")
-                return
-            current = current[directory]
-        current[directories[-1]] = ""
-
-    def rm(self, path):
-        directories = path.split("/")
-        current = self.root
-        for directory in directories[:-1]:
-            if directory not in current:
-                print("Directory not found")
-                return
-            current = current[directory]
-        if directories[-1] not in current:
-            print("File not found")
-            return
-        del current[directories[-1]]
-
-if __name__ == "__main__":
-    fs = FileSystem()
-
-    while True:
-        command = input(fs.current_directory + "> ")
-        parts = command.split(" ")
-
-        if parts[0] == "mkdir":
-            fs.mkdir(parts[1])
-        elif parts[0] == "cd":
-            fs.cd(parts[1])
-        elif parts[0] == "ls":
-            fs.ls()
-        elif parts[0] == "touch":
-            fs.touch(parts[1])
-        elif parts[0] == "rm":
-            fs.rm(parts[1])
-        elif parts[0] == "dir":
-            fs.ls()  # Same as ls command
-        elif parts[0] == "exit":
-            break
+        name = args[0]
+        if name == '..' and current_dir.parent:
+            current_dir = current_dir.parent
         else:
-            print("Command not found")
+            folder = find_child(name, current_dir)
+            if isinstance(folder, Folder):
+                current_dir = folder
+            else:
+                print(f"No subdirectory {name} found")
+    elif command == 'cdr':
+        current_dir = root
+    elif command == 'jump':
+        if not args:
+            return
+        name = args[0]
+        folder = find_child(name, root)
+        if isinstance(folder, Folder):
+            current_dir = folder
+        else:
+            print(f"No directory {name} found")
+    elif command == 'ls':
+        for child in current_dir.children:
+            print(child, end='\t')
+        print()
+    elif command == 'mkdir':
+        if not args:
+            return
+        name = args[0]
+        make_dir(name, current_dir)
+    elif command == 'mkfile':
+        if not args:
+            return
+        name = args[0]
+        make_file(name, current_dir)
+    else:
+        print(f"Invalid command {command}")
