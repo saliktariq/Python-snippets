@@ -92,6 +92,7 @@ airports_sorted = dict(sorted(airports.items()))
 airport_names = list(airports_sorted.keys())
 
 
+# Function to retrieve airport full name based on IATA code from dictionary
 def get_airport_name(iata_code):
     for key, value in airports_sorted.items():
         if iata_code == value:
@@ -103,6 +104,7 @@ canvas = Tk()
 
 # Creating a ttk style object
 style = ttk.Style()
+
 # Setting application title
 canvas.title("Flight Search")
 
