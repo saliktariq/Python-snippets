@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkcalendar import DateEntry
 import requests
+import threading
 
 airports = {
     'Aberdeen': 'ABZ',
@@ -149,19 +150,19 @@ from_label = Label(menu_frame, text="From:", font=("Futura", 16), bg="#F0EAD6")
 from_label.pack(side=TOP, pady=10)
 from_var = StringVar()
 from_dropdown = ttk.Combobox(menu_frame, textvariable=from_var, values=airport_names, font=("Arial", 14))
-from_dropdown.pack(side=TOP, pady=5)
+from_dropdown.pack(side=TOP, pady=5, padx=10)
 
 # Creating dropdown for 'To' cities
 to_label = Label(menu_frame, text="To:", font=("Futura", 16), bg="#F0EAD6")
 to_label.pack(side=TOP, pady=10)
 to_var = StringVar()
 to_dropdown = ttk.Combobox(menu_frame, textvariable=to_var, values=airport_names, font=("Arial", 14))
-to_dropdown.pack(side=TOP, pady=5)
+to_dropdown.pack(side=TOP, pady=5, padx=10)
 
 # Creating date selector for flight date
 date_label = Label(menu_frame, text="Flight Date:", font=("Futura", 16), bg="#F0EAD6")
 date_label.pack(side=TOP, pady=10)
-date_picker = DateEntry(menu_frame, width=12, background='white', foreground='black', borderwidth=2)
+date_picker = DateEntry(menu_frame, width=16, background='white', foreground='black', borderwidth=2)
 date_picker.pack(side=TOP, pady=5)
 # selected_date = date_picker.get_date()
 
@@ -172,7 +173,7 @@ main_content_frame.pack(side=LEFT, fill=BOTH, expand=True)
 
 # Creating result frame for displaying search results
 result_frame = Frame(main_content_frame, bg="#9DC3E6")
-result_frame.pack(side=TOP, fill=BOTH, expand=True, padx=50, pady=50)
+result_frame.pack(side=TOP, fill=BOTH, expand=True, padx=25, pady=50)
 
 # Creating result label
 result_label = Label(result_frame, text="Results:", font=("Futura", 14), bg="#9DC3E6")
@@ -213,8 +214,8 @@ def search_flight():
     # Authentication parameters
     params = {
         "grant_type": "client_credentials",
-        "client_id": "########################",
-        "client_secret": "##############"
+        "client_id": "#######",
+        "client_secret": "#######"
     }
 
     #  Request for authentication token
@@ -234,8 +235,8 @@ def search_flight():
         "destinationLocationCode": airports_sorted[to_var.get()],
         "departureDate": date_picker.get_date(),
         "adults": 1,
-        "currencyCode": "GBP",
-        "max": 25  # limit the number of results to 15
+        "currencyCode": "GBP"
+        ,"max": 25  # limit the number of results to 15
     }
 
     new_headers = {
@@ -249,6 +250,7 @@ def search_flight():
     # Adding the search results to the treeview
     if flight_response.status_code == 200:
         flight_data = flight_response.json()
+        reset_results()
         for offer in flight_data["data"]:
             itinerary = offer["itineraries"][0]
             segments = itinerary["segments"]
@@ -263,9 +265,29 @@ def search_flight():
         result_treeview.insert("", "end", values=(f"Error: {flight_response.status_code}", "", "", ""))
 
 
+def search_flight_threaded():
+    # Insert "Searching..." message into the treeview
+    result_treeview.insert("", "end", values=("Searching...", "", "", ""))
+
+    # Create a new thread and run the search_flight function in it
+    search_thread = threading.Thread(target=search_flight)
+    search_thread.start()
+
+
 # Creating search button
-search_button = Button(menu_frame, text="Search", font=("Futura", 16), bg="#4B4E6D", fg="white", command=search_flight)
+search_button = Button(menu_frame, text="Search", font=("Futura", 16), bg="#4B4E6D", fg="white",
+                       command=search_flight_threaded)
 search_button.pack(side=TOP, pady=10)
+
+
+def reset_results():
+    # Remove all items from the treeview
+    result_treeview.delete(*result_treeview.get_children())
+
+
+# Creating reset button
+reset_button = Button(menu_frame, text="Reset", font=("Futura", 16), bg="#4B4E6D", fg="white", command=reset_results)
+reset_button.pack(side=TOP, pady=10)
 
 # Starting the application loop
 canvas.mainloop()
