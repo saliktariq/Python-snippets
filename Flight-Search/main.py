@@ -213,8 +213,8 @@ def search_flight():
     # Authentication parameters
     params = {
         "grant_type": "client_credentials",
-        "client_id": "vbCW9wGpKPh2HI843Jw1KLVrWTJNAij5",
-        "client_secret": "bYTGyJfS2a6uM6Cy"
+        "client_id": "########################",
+        "client_secret": "##############"
     }
 
     #  Request for authentication token
