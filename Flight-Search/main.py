@@ -164,7 +164,7 @@ date_label = Label(menu_frame, text="Flight Date:", font=("Futura", 16), bg="#F0
 date_label.pack(side=TOP, pady=10)
 date_picker = DateEntry(menu_frame, width=16, background='white', foreground='black', borderwidth=2)
 date_picker.pack(side=TOP, pady=5)
-# selected_date = date_picker.get_date()
+
 
 
 # Creating main frame on the right side of the main frame
