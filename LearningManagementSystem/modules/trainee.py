@@ -58,4 +58,16 @@ class trainee:
                     ws.delete_rows(cell.row, 1)
         wb.save('MasterRecord.xlsx')
 
-
+    def update_in_excel(self):
+        wb = openpyxl.load_workbook('MasterRecord.xlsx')
+        ws = wb['ListOfTrainees']
+        for row in ws.iter_rows(min_row=2, max_col=5):
+            if row[0].value == self._id:
+                row[1].value = self._name
+                row[2].value = self._course
+                row[3].value = self._degree
+                row[4].value = self._work_exp
+                break
+        else:
+            print("Trainee not found.")
+        wb.save('MasterRecord.xlsx')
