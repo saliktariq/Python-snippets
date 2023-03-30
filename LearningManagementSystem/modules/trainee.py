@@ -48,3 +48,12 @@ class trainee:
         ws.cell(row=last_row+1, column=4, value=self._degree)
         ws.cell(row=last_row+1, column=5, value=self._work_exp)
         wb.save('MasterRecord.xlsx')
+
+    def delete_from_excel(self):
+        wb = openpyxl.load_workbook('MasterRecord.xlsx')
+        ws = wb['ListOfTrainees']
+        for row in ws.iter_rows(min_row=2, max_col=1):
+            for cell in row:
+                if cell.value == self._id:
+                    ws.delete_rows(cell.row, 1)
+        wb.save('MasterRecord.xlsx')
