@@ -57,3 +57,5 @@ class trainee:
                 if cell.value == self._id:
                     ws.delete_rows(cell.row, 1)
         wb.save('MasterRecord.xlsx')
+
+

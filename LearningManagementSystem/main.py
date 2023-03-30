@@ -1,4 +1,5 @@
 import openpyxl
+
 from modules.trainee import trainee
 
 
@@ -33,6 +34,7 @@ def view_trainee():
     else:
         print("Trainee not found.")
 
+
 def view_all_trainees():
     wb = openpyxl.load_workbook('MasterRecord.xlsx')
     ws = wb['ListOfTrainees']
@@ -43,3 +45,26 @@ def view_all_trainees():
         print(f"Degree: {row[3].value}")
         print(f"Work Experience: {row[4].value}")
         print()
+
+
+while True:
+    print("1. Create trainee")
+    print("2. Delete trainee")
+    print("3. View trainee")
+    print("4. View all trainees")
+    print("5. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == '1':
+        create_trainee()
+    elif choice == '2':
+        delete_trainee()
+    elif choice == '3':
+        view_trainee()
+    elif choice == '4':
+        view_all_trainees()
+    elif choice == '5':
+        break
+    else:
+        print("Invalid choice. Please try again.")
