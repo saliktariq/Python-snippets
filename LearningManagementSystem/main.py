@@ -1,5 +1,5 @@
+# importing openpyxl library required to read and write to excel files
 import openpyxl
-
 from modules.trainee import trainee
 
 
@@ -47,12 +47,30 @@ def view_all_trainees():
         print()
 
 
+def update_trainee():
+    id = input("Enter trainee ID: ")
+    wb = openpyxl.load_workbook('MasterRecord.xlsx')
+    ws = wb['ListOfTrainees']
+    for row in ws.iter_rows(min_row=2, max_col=5):
+        if row[0].value == id:
+            name = input(f"Enter new name for trainee with ID {id}: ")
+            course = input(f"Enter new course for trainee with ID {id}: ")
+            degree = input(f"Enter new degree for trainee with ID {id}: ")
+            work_exp = input(f"Enter new work experience for trainee with ID {id}: ")
+            t = trainee(id, name, course, degree, work_exp)
+            t.update_in_excel()
+            break
+    else:
+        print("Trainee not found.")
+
+
 while True:
     print("1. Create trainee")
     print("2. Delete trainee")
     print("3. View trainee")
     print("4. View all trainees")
-    print("5. Exit")
+    print("5. Update trainee by ID")
+    print("0. Exit")
 
     choice = input("Enter your choice: ")
 
@@ -65,6 +83,8 @@ while True:
     elif choice == '4':
         view_all_trainees()
     elif choice == '5':
+        update_trainee()
+    elif choice == '0':
         break
     else:
         print("Invalid choice. Please try again.")
