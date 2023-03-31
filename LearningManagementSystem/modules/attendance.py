@@ -60,7 +60,7 @@ class Attendance:
             'Trainer Name': self.trainer_name,
         }
         for col_num, (key, value) in enumerate(metadata.items(), 1):
-            col_letter = get_column_letter(ws.max_column + col_num)
+            col_letter = get_column_letter(ws.max_column + 1)
             cell = ws['{}{}'.format(col_letter, 1)]
             cell.value = key
             cell = ws['{}{}'.format(col_letter, 2)]

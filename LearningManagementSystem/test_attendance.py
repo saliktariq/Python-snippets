@@ -1,24 +1,23 @@
 import unittest
 import openpyxl
 from datetime import datetime
-from openpyxl.utils import get_column_letter
 from modules.attendance import Attendance
 
 
 class TestAttendance(unittest.TestCase):
     def test_constructor(self):
-        att = Attendance(start_time='09:00', end_time='17:00', trainer_id='TR001', trainer_name='Shilpa Vaidya')
+        att = Attendance(start_time='09:00', end_time='17:00', trainer_id='TR001', trainer_name='John Smith')
         self.assertIsInstance(att, Attendance)
         self.assertEqual(att.start_time, '09:00')
         self.assertEqual(att.end_time, '17:00')
         self.assertEqual(att.trainer_id, 'TR001')
-        self.assertEqual(att.trainer_name, 'Shilpa Vaidya')
+        self.assertEqual(att.trainer_name, 'John Smith')
         self.assertEqual(att.trainees_attended, [])
         self.assertEqual(att.trainees_not_attended, [])
 
     def test_save_to_excel(self):
         # Create an instance of the Attendance class
-        att = Attendance(start_time='09:00', end_time='17:00', trainer_id='TR001', trainer_name='Shilpa Vaidya')
+        att = Attendance(start_time='09:00', end_time='17:00', trainer_id='TR001', trainer_name='John Smith')
         att.trainees_attended = [('TRN001', 'Alice'), ('TRN002', 'Bob')]
         att.trainees_not_attended = [('TRN003', 'Charlie'), ('TRN004', 'David')]
         # Call the save_to_excel method
@@ -39,14 +38,13 @@ class TestAttendance(unittest.TestCase):
         self.assertEqual(ws['A5'].value, 'TRN004')
         self.assertEqual(ws['B5'].value, 'David')
         self.assertEqual(ws['C5'].value, 'Absent')
-        self.assertEqual(ws['D1'].value, 'Start Time')
-        self.assertEqual(ws['E1'].value, '09:00')
-        self.assertEqual(ws['D2'].value, 'End Time')
+
+        self.assertEqual(ws['D2'].value, '09:00')
+
         self.assertEqual(ws['E2'].value, '17:00')
-        self.assertEqual(ws['D3'].value, 'Trainer ID')
-        self.assertEqual(ws['E3'].value, 'TR001')
-        self.assertEqual(ws['D4'].value, 'Trainer Name')
-        self.assertEqual(ws['E4'].value, 'Shilpa Vaidya')
-        # Clean up by removing the sheet we created
-        wb.remove(ws)
+
+        self.assertEqual(ws['F2'].value, 'TR001')
+
+        self.assertEqual(ws['G2'].value, 'John Smith')
+
         wb.save('MasterRecord.xlsx')

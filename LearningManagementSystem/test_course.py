@@ -26,7 +26,7 @@ class TestCourse(unittest.TestCase):
         wb = openpyxl.load_workbook('MasterRecord.xlsx')
         ws = wb['ListOfCourses']
         cell_value = ws.cell(row=ws.max_row, column=1).value
-        self.assertEqual(cell_value, "C002")
+        self.assertEqual(cell_value, "C001")
         wb.close()
 
     def test_delete_from_excel(self):

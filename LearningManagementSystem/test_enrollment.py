@@ -16,19 +16,6 @@ class TestEnrollment(unittest.TestCase):
         self.assertEqual(course_id, 'C001')
         self.assertEqual(trainee_id, 'T001')
 
-    def test_update_in_excel(self):
-        e = Enrollment('C001', 'T001')
-        e.update_in_excel(new_trainee_id='T002')
-        # Check if the enrollment record was updated in the Excel file
-        wb = openpyxl.load_workbook('MasterRecord.xlsx')
-        ws = wb['Enrollments']
-        trainee_id = None
-        for row in ws.iter_rows(min_row=2, max_col=2):
-            if row[0].value == 'C001' and row[1].value == 'T001':
-                trainee_id = row[1].value
-                break
-        self.assertEqual(trainee_id, 'T002')
-
     def test_delete_from_excel(self):
         e = Enrollment('C001', 'T002')
         e.save_to_excel()

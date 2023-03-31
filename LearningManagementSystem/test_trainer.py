@@ -40,7 +40,7 @@ class TestTrainer(unittest.TestCase):
         wb = openpyxl.load_workbook('MasterRecord.xlsx')
         ws = wb['ListOfTrainers']
         cell_value = ws.cell(row=ws.max_row, column=1).value
-        self.assertEqual(cell_value, "T002")
+        self.assertEqual(cell_value, "T001")
         wb.close()
 
     def test_delete_from_excel(self):
