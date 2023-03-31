@@ -1,6 +1,6 @@
 # importing openpyxl library required to read and write to excel files
 import openpyxl
-from modules.trainee import trainee
+from modules.trainee import Trainee
 
 
 def create_trainee():
@@ -9,13 +9,13 @@ def create_trainee():
     course = input("Enter course: ")
     degree = input("Enter degree: ")
     work_exp = input("Enter work experience: ")
-    t = trainee(id, name, course, degree, work_exp)
+    t = Trainee(id, name, course, degree, work_exp)
     t.save_to_excel()
 
 
 def delete_trainee():
     id = input("Enter trainee ID: ")
-    t = trainee(id, '', '', '', '')
+    t = Trainee(id, '', '', '', '')
     t.delete_from_excel()
 
 
@@ -57,7 +57,7 @@ def update_trainee():
             course = input(f"Enter new course for trainee with ID {id}: ")
             degree = input(f"Enter new degree for trainee with ID {id}: ")
             work_exp = input(f"Enter new work experience for trainee with ID {id}: ")
-            t = trainee(id, name, course, degree, work_exp)
+            t = Trainee(id, name, course, degree, work_exp)
             t.update_in_excel()
             break
     else:

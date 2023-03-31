@@ -1,13 +1,13 @@
 import unittest
 import openpyxl
-from modules.trainee import trainee
+from modules.trainee import Trainee
 
 
 class TestTrainee(unittest.TestCase):
     def setUp(self):
-        self.t1 = trainee('1', 'Irina', 'Python', 'Bachelor', '1 year')
-        self.t2 = trainee('2', 'Bob', 'Java', 'Master', '2 years')
-        self.t3 = trainee('3', 'Charles', 'C++', 'PhD', '3 years')
+        self.t1 = Trainee('1', 'Irina', 'Python', 'Bachelor', '1 year')
+        self.t2 = Trainee('2', 'Bob', 'Java', 'Master', '2 years')
+        self.t3 = Trainee('3', 'Charles', 'C++', 'PhD', '3 years')
 
     def test_save_to_excel(self):
         self.t1.save_to_excel()
