@@ -1,6 +1,7 @@
 import openpyxl
 
-class trainee:
+
+class Trainee:
     def __init__(self, trainee_id, name, course, degree, work_exp):
         self._id = trainee_id
         self._name = name
@@ -43,11 +44,11 @@ class trainee:
             wb = openpyxl.load_workbook('MasterRecord.xlsx')
             ws = wb['ListOfTrainees']
             last_row = ws.max_row
-            ws.cell(row=last_row+1, column=1, value=self._id)
-            ws.cell(row=last_row+1, column=2, value=self._name)
-            ws.cell(row=last_row+1, column=3, value=self._course)
-            ws.cell(row=last_row+1, column=4, value=self._degree)
-            ws.cell(row=last_row+1, column=5, value=self._work_exp)
+            ws.cell(row=last_row + 1, column=1, value=self._id)
+            ws.cell(row=last_row + 1, column=2, value=self._name)
+            ws.cell(row=last_row + 1, column=3, value=self._course)
+            ws.cell(row=last_row + 1, column=4, value=self._degree)
+            ws.cell(row=last_row + 1, column=5, value=self._work_exp)
             wb.save('MasterRecord.xlsx')
         except Exception as e:
             print(f"Error saving trainee to Excel file: {e}")
