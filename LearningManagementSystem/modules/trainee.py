@@ -81,3 +81,13 @@ class Trainee:
             wb.save('MasterRecord.xlsx')
         except Exception as e:
             print(f"Error updating trainee in Excel file: {e}")
+
+    @classmethod
+    def get_all_from_excel(cls):
+        wb = openpyxl.load_workbook('MasterRecord.xlsx')
+        ws = wb['ListOfTrainees']
+        trainees = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            trainee = cls(*row)
+            trainees.append(trainee)
+        return trainees

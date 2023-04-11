@@ -1,5 +1,6 @@
 import openpyxl
 
+
 class Course:
     def __init__(self, course_id, description):
         self._id = course_id
@@ -22,8 +23,8 @@ class Course:
             wb = openpyxl.load_workbook('MasterRecord.xlsx')
             ws = wb['ListOfCourses']
             last_row = ws.max_row
-            ws.cell(row=last_row+1, column=1, value=self._id)
-            ws.cell(row=last_row+1, column=2, value=self._description)
+            ws.cell(row=last_row + 1, column=1, value=self._id)
+            ws.cell(row=last_row + 1, column=2, value=self._description)
             wb.save('MasterRecord.xlsx')
         except Exception as e:
             print(f"Error saving course to Excel file: {e}")
@@ -53,3 +54,17 @@ class Course:
             wb.save('MasterRecord.xlsx')
         except Exception as e:
             print(f"Error updating course in Excel file: {e}")
+
+    @staticmethod
+    def get_all_from_excel():
+        courses = []
+        try:
+            wb = openpyxl.load_workbook('MasterRecord.xlsx')
+        except FileNotFoundError:
+            return courses
+        ws = wb['ListOfCourses'] if 'ListOfCourses' in wb.sheetnames else None
+        if ws:
+            for row in ws.iter_rows(min_row=2, values_only=True):
+                course = Course(row[0], row[1])
+                courses.append(course)
+        return courses

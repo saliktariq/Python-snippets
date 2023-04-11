@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Create Enrollment</title>
+</head>
+<body>
+    <h1>Create Enrollment</h1>
+    <form method="POST" action="/enrollment">
+        <label for="course_id">Course ID:</label>
+        <select name="course_id" id="course_id">
+            {% for course in courses %}
+            <option value="{{ course.course_id }}">{{ course.course_id }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="trainee_id">Trainee ID:</label>
+        <select name="trainee_id" id="trainee_id">
+            {% for trainee in trainees %}
+            <option value="{{ trainee.trainee_id }}">{{ trainee.trainee_id }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input type="submit" value="Create">
+    </form>
+</body>
+</html>

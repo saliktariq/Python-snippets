@@ -1,4 +1,8 @@
+import os
+import smtplib
 from datetime import datetime
+from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
 
 import openpyxl
 from openpyxl.utils import get_column_letter
@@ -67,3 +71,42 @@ class Attendance:
             cell.value = value
         # Save the workbook
         wb.save('MasterRecord.xlsx')
+
+
+    @staticmethod
+    def send_attendance_email(to_addr):
+        # Get the filename of the saved attendance sheet
+        filename = datetime.today().strftime('%m-%d-%Y') + '.xlsx'
+
+        # Open the saved attendance sheet
+        wb = openpyxl.load_workbook('MasterRecord.xlsx')
+        ws = wb[datetime.today().strftime('%m-%d-%Y')]
+
+        # Create a MIME multipart message
+        msg = MIMEMultipart()
+        msg['From'] = 'sender@emailaddressgmail.com'
+        msg['To'] = to_addr
+        msg['Subject'] = 'Attendance Sheet'
+
+        # Attach the attendance sheet to the email as an
+        # application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        with open(filename, 'wb') as f:
+            wb.save(f)
+        with open(filename, 'rb') as f:
+            attachment = MIMEApplication(f.read(), _subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            attachment.add_header('Content-Disposition', 'attachment', filename=filename)
+            msg.attach(attachment)
+
+        # Send the email
+        smtp_server = 'smtp server address'
+        smtp_port = 587
+        smtp_username = 'smtp username'
+        smtp_password = 'password'
+        smtp_conn = smtplib.SMTP(smtp_server, smtp_port)
+        smtp_conn.starttls()
+        smtp_conn.login(smtp_username, smtp_password)
+        smtp_conn.sendmail(msg['From'], msg['To'], msg.as_string())
+        smtp_conn.quit()
+
+        # Delete the saved attendance sheet from the disk
+        os.remove(filename)

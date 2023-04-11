@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>View Attendance</title>
+</head>
+<body>
+    <h1>Attendance Records</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Trainer ID</th>
+                <th>Trainer Name</th>
+                <th>Trainees Attended</th>
+                <th>Trainees Not Attended</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.date }}</td>
+                <td>{{ record.start_time }}</td>
+                <td>{{ record.end_time }}</td>
+                <td>{{ record.trainer_id }}</td>
+                <td>{{ record.trainer_name }}</td>
+                <td>
+                    {% if record.trainees_attended %}
+                        {% for trainee in record.trainees_attended %}
+                            {{ trainee[1] }} ({{ trainee[0] }})<br>
+                        {% endfor %}
+                    {% else %}
+                        None
+                    {% endif %}
+                </td>
+                <td>
+                    {% if record.trainees_not_attended %}
+                        {% for trainee in record.trainees_not_attended %}
+                            {{ trainee[1] }} ({{ trainee[0] }})<br>
+                        {% endfor %}
+                    {% else %}
+                        None
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
