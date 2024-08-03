@@ -7,7 +7,7 @@ class Node:
         self.left = None
         self.right = None
 
-def threaded_bst_search(root, target, found_flag, found_queue):
+def threaded_bt_search(root, target, found_flag, found_queue):
     if not root or found_flag.is_set():
         return
 
@@ -17,10 +17,10 @@ def threaded_bst_search(root, target, found_flag, found_queue):
         return
 
     # Launch concurrent threads for left and right subtrees
-    left_thread = threading.Thread(target=threaded_bst_search,
+    left_thread = threading.Thread(target=threaded_bt_search,
                                    args=(root.left, target, found_flag, found_queue))
-    right_thread = threading.Thread(target=threaded_bst_search,
-                                   args=(root.right, target, found_flag, found_queue))
+    right_thread = threading.Thread(target=threaded_bt_search,
+                                    args=(root.right, target, found_flag, found_queue))
 
     left_thread.start()
     right_thread.start()
